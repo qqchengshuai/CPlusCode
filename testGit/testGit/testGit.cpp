@@ -2,11 +2,77 @@
 //
 
 #include <iostream>
+using namespace std;
+class Item_base {
+public:
+    Item_base(const string& book = "",double sales_price = 0):isbn(book),price(sales_price)
+    {}
+    string book() const
+    {
+        return isbn;
+    }
+    virtual double net_price(int n) const
+    {
+        cout << "Item_base,n:" << n << endl;
+        return n * price;
+    }
+
+    virtual ~Item_base()
+    {
+    }
+private:
+    string isbn;
+protected:
+    double price;
+};
+
+class Bulk_item :public Item_base{
+public:
+    double net_price(int n)const
+    {
+        cout << "bulk_item,n:"<<n << endl;
+        cout <<"book:"<< book() << endl;
+        return n * price;
+    }
+private:
+    int nMin_qty;
+    double discount;
+};
+
+class C_item :public Bulk_item {
+public:
+    double net_price(int n)const
+    {
+        cout << "C_item,n:" << n << endl;
+        cout << "book:" << book() << endl;
+        //net_price(2);
+        return n * price;
+    }
+};
 
 int main()
 {
+    Item_base base("a",100);
 
-    std::cout << "Hello World!\n";
+    //cout << base.net_price(1) << endl;
+
+    Bulk_item bulk;
+
+    //Item_base& t = bulk;
+    //t.net_price(1);
+    //Item_base* p = new Bulk_item();
+    //p->net_price(1);
+    //cout << sizeof(string) << endl;
+    //cout << sizeof(Item_base) << endl;
+    //cout << sizeof(Bulk_item) << endl;
+
+    C_item citem;
+    Item_base& t = citem;
+    t.Item_base::net_price(1);
+    //t.Bulk_item::net_price(3);
+    t.net_price(2);
+
+    //std::cout << "Hello World!\n";
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
